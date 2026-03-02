@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import ResidentDashboard from "./pages/ResidentDashboard";
@@ -7,23 +7,51 @@ import SecretaryDashboard from "./pages/SecretaryDashboard";
 import Events from "./pages/Events";
 import Beneficiaries from "./pages/Beneficiaries";
 import ActivityLogs from "./pages/ActivityLogs";
+import { AuthProvider } from "./contexts/AuthContext";
+import { useAuth } from "./contexts/useAuth";
+
+function RequireAuth({ children }: { children: React.ReactNode }) {
+  const { user } = useAuth();
+  if (!user) {
+    return <Navigate to="/" replace />;
+  }
+  return children;
+}
 
 function App() {
   return (
-    <Router>
-      <div className="page-center">
+    <AuthProvider>
+      <Router>
         <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/resident" element={<ResidentDashboard />} />
-        <Route path="/staff" element={<StaffDashboard />} />
-        <Route path="/secretary" element={<SecretaryDashboard />} />
-        <Route path="/events" element={<Events />} />
-        <Route path="/beneficiaries" element={<Beneficiaries />} />
-        <Route path="/activity-logs" element={<ActivityLogs />} />
+          <Route path="/" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route
+            path="/resident"
+            element={<RequireAuth><ResidentDashboard /></RequireAuth>}
+          />
+          <Route
+            path="/staff"
+            element={<RequireAuth><StaffDashboard /></RequireAuth>}
+          />
+          <Route
+            path="/secretary"
+            element={<RequireAuth><SecretaryDashboard /></RequireAuth>}
+          />
+          <Route
+            path="/events"
+            element={<RequireAuth><Events /></RequireAuth>}
+          />
+          <Route
+            path="/beneficiaries"
+            element={<RequireAuth><Beneficiaries /></RequireAuth>}
+          />
+          <Route
+            path="/activity-logs"
+            element={<RequireAuth><ActivityLogs /></RequireAuth>}
+          />
         </Routes>
-      </div>
-    </Router>
+      </Router>
+    </AuthProvider>
   );
 }
 

@@ -1,142 +1,146 @@
-// Simple authentication service using localStorage
+// Authentication service communicating with backend API
+
+export type Role = "resident" | "staff" | "secretary";
 
 export interface User {
   id: string;
   username: string;
   email: string;
+  role: Role;
+}
+
+export interface Resident {
+  id: string;
+  name: string;
+  age: number;
+  is_pwd: boolean;
+  status: string;
+}
+
+export interface Program {
+  id: string;
+  [key: string]: unknown;
+}
+
+export interface ActivityLog {
+  id: string;
+  action: string;
+  userId: string;
+  timestamp: string;
+}
+
+export interface RegisterPayload {
+  username: string;
+  firstName: string;
+  middleName?: string;
+  lastName: string;
+  email: string;
+  contactNumber?: string;
+  address?: string;
   password: string;
-  role: "resident" | "staff" | "secretary";
+  role: Role;
 }
 
-// Reset/initialize auth data
-function initializeAuthData() {
-  const defaultUsers: User[] = [
-    {
-      id: "1",
-      username: "John Smith",
-      email: "john@barangay.gov",
-      password: "123456",
-      role: "resident",
-    },
-    {
-      id: "2",
-      username: "Jane Staff",
-      email: "staff@barangay.gov",
-      password: "123456",
-      role: "staff",
-    },
-    {
-      id: "3",
-      username: "Admin Secretary",
-      email: "secretary@barangay.gov",
-      password: "123456",
-      role: "secretary",
-    },
-  ];
-  localStorage.removeItem("barangay_users");
-  localStorage.setItem("barangay_users", JSON.stringify(defaultUsers));
-  return defaultUsers;
+interface AuthSuccessResponse {
+  token: string;
+  user: User;
 }
 
-// Get all registered users from localStorage
-export function getAllUsers(): User[] {
+interface ApiError {
+  error: string;
+}
+
+function isApiError(value: unknown): value is ApiError {
+  return typeof value === "object" && value !== null && "error" in value && typeof (value as { error: unknown }).error === "string";
+}
+
+function getErrorMessage(value: unknown, fallback: string): string {
+  return isApiError(value) ? value.error : fallback;
+}
+
+const API_ROOT = import.meta.env.VITE_API_ROOT ?? "http://127.0.0.1:4000/api";
+
+async function request<TResponse>(path: string, options: RequestInit = {}): Promise<TResponse> {
+  const token = localStorage.getItem("auth_token");
+  const headers: Record<string, string> = { "Content-Type": "application/json" };
+  if (token) headers["Authorization"] = `Bearer ${token}`;
+  let res: Response;
   try {
-    const users = localStorage.getItem("barangay_users");
-    
-    if (!users) {
-      return initializeAuthData();
-    }
-    
-    const parsedUsers = JSON.parse(users);
-    
-    // If data is empty or invalid, reset with defaults
-    if (!Array.isArray(parsedUsers) || parsedUsers.length === 0) {
-      return initializeAuthData();
-    }
-    
-    // Validate users have required fields
-    const validUsers = parsedUsers.filter(u => u.username && u.password);
-    if (validUsers.length === 0) {
-      return initializeAuthData();
-    }
-    
-    return validUsers;
-  } catch (e) {
-    console.error("Error parsing users:", e);
-    return initializeAuthData();
+    res = await fetch(API_ROOT + path, { ...options, headers: { ...headers, ...(options.headers as Record<string, string> | undefined) } });
+  } catch {
+    throw { error: "Cannot connect to API server at 127.0.0.1:4000. Start `npm run server`." } satisfies ApiError;
+  }
+  const data: unknown = await res.json().catch(() => ({}));
+  if (!res.ok) throw data;
+  return data as TResponse;
+}
+
+export async function registerUser(
+  payload: RegisterPayload
+): Promise<{ success: boolean; error?: string }> {
+  try {
+    await request<{ success: boolean }>("/register", {
+      method: "POST",
+      body: JSON.stringify(payload),
+    });
+    return { success: true };
+  } catch (err: unknown) {
+    return { success: false, error: getErrorMessage(err, "Registration failed") };
   }
 }
 
-// Register a new user
-export function registerUser(username: string, email: string, password: string, confirmPassword: string, role: string): { success: boolean; error?: string } {
-  // Validation
-  if (!username.trim()) {
-    return { success: false, error: "Username is required" };
+export async function loginUser(
+  username: string,
+  password: string
+): Promise<{ success: boolean; user?: User; error?: string }> {
+  try {
+    const result = await request<AuthSuccessResponse>("/login", {
+      method: "POST",
+      body: JSON.stringify({ username, password }),
+    });
+    if (result.token) {
+      localStorage.setItem("auth_token", result.token);
+      return { success: true, user: result.user };
+    }
+    return { success: false, error: "No token received" };
+  } catch (err: unknown) {
+    return { success: false, error: getErrorMessage(err, "Login failed") };
   }
-  if (!email.trim()) {
-    return { success: false, error: "Email is required" };
-  }
-  if (!password || password.length < 6) {
-    return { success: false, error: "Password must be at least 6 characters" };
-  }
-  if (password !== confirmPassword) {
-    return { success: false, error: "Passwords do not match" };
-  }
-
-  const users = getAllUsers();
-
-  // Check if user already exists
-  if (users.some((u) => u.username === username)) {
-    return { success: false, error: "Username already exists" };
-  }
-  if (users.some((u) => u.email === email)) {
-    return { success: false, error: "Email already registered" };
-  }
-
-  // Create new user
-  const newUser: User = {
-    id: Date.now().toString(),
-    username,
-    email,
-    password, // In production, hash this!
-    role: (role as "resident" | "staff" | "secretary") || "resident",
-  };
-
-  // Save user
-  users.push(newUser);
-  localStorage.setItem("barangay_users", JSON.stringify(users));
-
-  return { success: true };
 }
 
-// Login user
-export function loginUser(username: string, password: string): { success: boolean; user?: User; error?: string } {
-  if (!username.trim()) {
-    return { success: false, error: "Username is required" };
-  }
-  if (!password) {
-    return { success: false, error: "Password is required" };
-  }
-
-  const users = getAllUsers();
-  console.log("Available users:", users.map(u => u.username));
-  console.log("Looking for username:", username);
-  
-  const user = users.find((u) => u.username.toLowerCase() === username.toLowerCase());
-
-  if (!user) {
-    return { success: false, error: "User not found. Please register first." };
-  }
-
-  if (user.password !== password) {
-    return { success: false, error: "Incorrect password" };
-  }
-
-  return { success: true, user };
+export function logout() {
+  localStorage.removeItem("auth_token");
 }
 
-// Check if user exists
-export function userExists(username: string): boolean {
-  const users = getAllUsers();
-  return users.some((u) => u.username === username);
+export async function fetchResidents() {
+  return await request<Resident[]>("/residents");
+}
+
+export async function createResident(resident: Omit<Resident, "id">) {
+  return await request<Resident>("/residents", { method: "POST", body: JSON.stringify(resident) });
+}
+
+export async function updateResident(id: string, resident: Omit<Resident, "id">) {
+  return await request<Resident>(`/residents/${id}`, { method: "PUT", body: JSON.stringify(resident) });
+}
+
+export async function deleteResident(id: string) {
+  return await request<{ success: boolean }>(`/residents/${id}`, { method: "DELETE" });
+}
+
+export async function fetchPrograms() {
+  return await request<Program[]>("/programs");
+}
+
+export async function fetchBeneficiaries() {
+  return await request<Resident[]>("/beneficiaries");
+}
+
+export async function fetchLogs() {
+  return await request<ActivityLog[]>("/logs");
+}
+
+// helper
+export function isLoggedIn() {
+  return !!localStorage.getItem("auth_token");
 }

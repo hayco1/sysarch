@@ -1,38 +1,36 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { loginUser } from "../services/authService";
+import { useAuth } from "../contexts/useAuth";
 
 export default function Login() {
   const navigate = useNavigate();
-  const [role, setRole] = useState<"resident" | "staff" | "secretary">("resident");
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
+  const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const { setUser } = useAuth();
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
     setLoading(true);
 
-    const username = `${firstName} ${lastName}`;
-    console.log("Attempting login with username:", username, "password:", password);
-    
-    const result = loginUser(username, password);
-    console.log("Login result:", result);
-
-    if (result.success && result.user) {
-      // Navigate based on role
-      if (role === "resident") {
-        navigate("/resident");
-      } else if (role === "staff") {
-        navigate("/staff");
-      } else if (role === "secretary") {
-        navigate("/secretary");
+    const username = identifier.trim().replace(/\s+/g, " ");
+    try {
+      const result = await loginUser(username, password);
+      if (result.success && result.user) {
+        // set auth context immediately so routes/components can access user
+        setUser(result.user);
+        const userRole = result.user.role;
+        if (userRole === "resident") navigate("/resident");
+        else if (userRole === "staff") navigate("/staff");
+        else if (userRole === "secretary") navigate("/secretary");
+      } else {
+        setError(result.error || "Login failed");
       }
-    } else {
-      setError(result.error || "Login failed");
+    } catch {
+      setError("Login failed");
     }
     setLoading(false);
   };
@@ -56,7 +54,7 @@ export default function Login() {
         </div>
 
         <div style={styles.formContainer}>
-          <h2 style={styles.formTitle}>LOGIN AS {role.toUpperCase()}</h2>
+          <h2 style={styles.formTitle}>LOGIN</h2>
           
           {error && <div style={styles.errorBox}>{error}</div>}
 
@@ -69,27 +67,16 @@ export default function Login() {
 
           <form style={styles.form} onSubmit={handleLogin}>
             <div style={styles.formGroup}>
-              <label style={styles.label}>Name:</label>
-              <div style={{ display: "flex", gap: "8px" }}>
-                <input
-                  type="text"
-                  placeholder="First"
-                  value={firstName}
-                  onChange={(e) => setFirstName(e.target.value)}
-                  style={{ ...styles.input, flex: 1 }}
-                  disabled={loading}
-                  required
-                />
-                <input
-                  type="text"
-                  placeholder="Last"
-                  value={lastName}
-                  onChange={(e) => setLastName(e.target.value)}
-                  style={{ ...styles.input, flex: 1 }}
-                  disabled={loading}
-                  required
-                />
-              </div>
+              <label style={styles.label}>Username or Email:</label>
+              <input
+                type="text"
+                placeholder="e.g. Jane Staff or jane@example.com"
+                value={identifier}
+                onChange={(e) => setIdentifier(e.target.value)}
+                style={styles.input}
+                disabled={loading}
+                required
+              />
             </div>
 
             <div style={styles.formGroup}>
@@ -105,19 +92,7 @@ export default function Login() {
               />
             </div>
 
-            <div style={styles.formGroup}>
-              <label style={styles.label}>Role:</label>
-              <select
-                value={role}
-                onChange={(e) => setRole(e.target.value as "resident" | "staff" | "secretary")}
-                style={styles.select}
-                disabled={loading}
-              >
-                <option value="resident">Resident</option>
-                <option value="staff">Staff</option>
-                <option value="secretary">Secretary</option>
-              </select>
-            </div>
+  
 
             <button type="submit" style={styles.button} disabled={loading}>
               {loading ? "LOGGING IN..." : "LOGIN"}
@@ -237,6 +212,7 @@ const styles = {
     fontSize: "13px",
     boxSizing: "border-box" as const,
     background: "#f9f9f9",
+    color: "#1f2937",
   },
   select: {
     width: "100%",
@@ -246,6 +222,7 @@ const styles = {
     fontSize: "13px",
     boxSizing: "border-box" as const,
     background: "#f9f9f9",
+    color: "#1f2937",
   },
   button: {
     width: "100%",

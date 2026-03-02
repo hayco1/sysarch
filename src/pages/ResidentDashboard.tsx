@@ -1,10 +1,9 @@
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { mockEvents, type Event } from "../data/mockData";
+import { mockEvents } from "../data/mockData";
 
 export default function ResidentDashboard() {
   const navigate = useNavigate();
-  const location = useLocation();
   const [currentTab, setCurrentTab] = useState<"events" | "census">("events");
 
   const handleLogout = () => {

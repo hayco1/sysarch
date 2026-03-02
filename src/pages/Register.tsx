@@ -1,6 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { registerUser } from "../services/authService";
+import type { RegisterPayload } from "../services/authService";
+import type { Role } from "../services/authService";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -11,27 +13,56 @@ export default function Register() {
   const [contactNumber, setContactNumber] = useState("");
   const [address, setAddress] = useState("");
   const [password, setPassword] = useState("");
-  const [role, setRole] = useState("staff");
+  const [role, setRole] = useState<Role>("staff");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handleRegister = (e: React.FormEvent) => {
+  const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
     setSuccess("");
     setLoading(true);
 
-    const username = `${firstName} ${lastName}`;
-    const result = registerUser(username, email, password, password, role);
+    const cleanFirstName = firstName.trim();
+    const cleanMiddleName = middleName.trim();
+    const cleanLastName = lastName.trim();
+    const cleanEmail = email.trim().toLowerCase();
+    const cleanContactNumber = contactNumber.trim();
+    const cleanAddress = address.trim();
+    const cleanPassword = password.trim();
 
-    if (result.success) {
-      setSuccess("Account created successfully! Redirecting to login...");
-      setTimeout(() => {
-        navigate("/");
-      }, 1500);
-    } else {
-      setError(result.error || "Registration failed");
+    if (!cleanFirstName || !cleanLastName) {
+      setError("First name and last name are required");
+      setLoading(false);
+      return;
+    }
+
+    const username = [cleanFirstName, cleanMiddleName, cleanLastName].filter(Boolean).join(" ");
+    const payload: RegisterPayload = {
+      username,
+      firstName: cleanFirstName,
+      middleName: cleanMiddleName || undefined,
+      lastName: cleanLastName,
+      email: cleanEmail,
+      contactNumber: cleanContactNumber || undefined,
+      address: cleanAddress || undefined,
+      password: cleanPassword,
+      role,
+    };
+
+    try {
+      const result = await registerUser(payload);
+      if (result.success) {
+        setSuccess("Account created successfully! Redirecting to login...");
+        setTimeout(() => {
+          navigate("/");
+        }, 1500);
+      } else {
+        setError(result.error || "Registration failed");
+      }
+    } catch {
+      setError("Registration failed");
     }
     setLoading(false);
   };
@@ -147,10 +178,11 @@ export default function Register() {
               <label style={styles.label}>ROLES</label>
               <select
                 value={role}
-                onChange={(e) => setRole(e.target.value)}
+                onChange={(e) => setRole(e.target.value as Role)}
                 style={styles.select}
                 disabled={loading}
               >
+                <option value="resident">Resident</option>
                 <option value="staff">Staff</option>
                 <option value="secretary">Secretary</option>
               </select>
@@ -278,6 +310,7 @@ const styles = {
     fontSize: "13px",
     boxSizing: "border-box" as const,
     background: "#f9f9f9",
+    color: "#1f2937",
   },
   select: {
     width: "100%",
@@ -287,6 +320,7 @@ const styles = {
     fontSize: "13px",
     boxSizing: "border-box" as const,
     background: "#f9f9f9",
+    color: "#1f2937",
   },
   button: {
     width: "100%",
