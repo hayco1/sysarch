@@ -11,10 +11,24 @@ export interface User {
 
 export interface Resident {
   id: string;
+  userId?: string;
   name: string;
+  email?: string;
+  contactNumber?: string;
+  address: string;
+  household: string;
+  membersCount: number;
   age: number;
+  birthDate?: string;
+  gender?: string;
+  civilStatus?: string;
+  occupation?: string;
   is_pwd: boolean;
+  citizenship?: string;
+  notes?: string;
   status: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface Program {
@@ -58,7 +72,7 @@ function getErrorMessage(value: unknown, fallback: string): string {
   return isApiError(value) ? value.error : fallback;
 }
 
-const API_ROOT = import.meta.env.VITE_API_ROOT ?? "http://127.0.0.1:4000/api";
+const API_ROOT = import.meta.env.VITE_API_ROOT ?? "/api";
 
 async function request<TResponse>(path: string, options: RequestInit = {}): Promise<TResponse> {
   const token = localStorage.getItem("auth_token");
@@ -68,7 +82,7 @@ async function request<TResponse>(path: string, options: RequestInit = {}): Prom
   try {
     res = await fetch(API_ROOT + path, { ...options, headers: { ...headers, ...(options.headers as Record<string, string> | undefined) } });
   } catch {
-    throw { error: "Cannot connect to API server at 127.0.0.1:4000. Start `npm run server`." } satisfies ApiError;
+    throw { error: "Cannot connect to the API server. Start `npm run server` and keep the frontend dev server running." } satisfies ApiError;
   }
   const data: unknown = await res.json().catch(() => ({}));
   if (!res.ok) throw data;
@@ -126,6 +140,14 @@ export async function updateResident(id: string, resident: Omit<Resident, "id">)
 
 export async function deleteResident(id: string) {
   return await request<{ success: boolean }>(`/residents/${id}`, { method: "DELETE" });
+}
+
+export async function fetchMyResident() {
+  return await request<Resident | null>("/residents/me");
+}
+
+export async function saveMyResident(resident: Omit<Resident, "id">) {
+  return await request<Resident>("/residents/me", { method: "POST", body: JSON.stringify(resident) });
 }
 
 export async function fetchPrograms() {

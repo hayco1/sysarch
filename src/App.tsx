@@ -13,7 +13,7 @@ import { useAuth } from "./contexts/useAuth";
 function RequireAuth({ children }: { children: React.ReactNode }) {
   const { user } = useAuth();
   if (!user) {
-    return <Navigate to="/" replace />;
+    return <Navigate to="/login" replace />;
   }
   return children;
 }
@@ -23,7 +23,8 @@ function App() {
     <AuthProvider>
       <Router>
         <Routes>
-          <Route path="/" element={<Login />} />
+          <Route path="/" element={<Navigate to="/login" replace />} />
+          <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route
             path="/resident"
@@ -49,6 +50,7 @@ function App() {
             path="/activity-logs"
             element={<RequireAuth><ActivityLogs /></RequireAuth>}
           />
+          <Route path="*" element={<Navigate to="/login" replace />} />
         </Routes>
       </Router>
     </AuthProvider>

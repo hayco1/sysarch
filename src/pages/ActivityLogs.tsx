@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { fetchLogs } from "../services/authService";
 import type { ActivityLog } from "../services/authService";
 import { useAuth } from "../contexts/useAuth";
+import PortalHeader from "../components/PortalHeader";
 
 export default function ActivityLogs() {
   const navigate = useNavigate();
@@ -24,39 +25,33 @@ export default function ActivityLogs() {
 
   const handleLogout = () => {
     logout();
-    navigate("/");
+    navigate("/login");
   };
 
   return (
     <div style={styles.container}>
-      <nav style={styles.navbar}>
-        <h1 style={styles.navTitle}>Barangay 420 - Activity Logs</h1>
-        <div>
-          <Link to={dashboardPath} style={styles.navLink}>
-            Dashboard
-          </Link>
-          {" | "}
-          <Link to="/activity-logs" style={styles.navLink}>
-            Activity Logs
-          </Link>
-          {" | "}
-          <button onClick={handleLogout} style={styles.navButton}>
-            Logout
-          </button>
-        </div>
-      </nav>
+      <PortalHeader
+        rightLabel="Activity Logs"
+        actions={
+          <>
+            <Link to={dashboardPath} style={styles.headerAction}>Dashboard</Link>
+            <Link to="/activity-logs" style={styles.headerAction}>Logs</Link>
+            <button onClick={handleLogout} style={styles.headerButton}>Logout</button>
+          </>
+        }
+      />
 
       <div style={styles.content}>
         <h2 style={styles.pageTitle}>System Activity Logs & Audit Trail</h2>
         {error && <p style={styles.errorText}>{error}</p>}
 
         <table style={styles.table}>
-          <thead style={{background: "#1e3c72", color: "white"}}>
+          <thead style={{ background: "#1e3c72", color: "white" }}>
             <tr>
-              <th style={{padding: "12px", textAlign: "left"}}>Log ID</th>
-              <th style={{padding: "12px", textAlign: "left"}}>Activity</th>
-              <th style={{padding: "12px", textAlign: "left"}}>User ID</th>
-              <th style={{padding: "12px", textAlign: "left"}}>Timestamp</th>
+              <th style={{ padding: "12px", textAlign: "left" }}>Log ID</th>
+              <th style={{ padding: "12px", textAlign: "left" }}>Activity</th>
+              <th style={{ padding: "12px", textAlign: "left" }}>User ID</th>
+              <th style={{ padding: "12px", textAlign: "left" }}>Timestamp</th>
             </tr>
           </thead>
           <tbody>
@@ -88,59 +83,48 @@ const styles = {
     minHeight: "100vh",
     display: "flex" as const,
     flexDirection: "column" as const,
-    background: "#f8f9fa",
+    background: "#edf4fb",
     fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
     overflowX: "hidden" as const,
   },
-  navbar: {
-    background: "linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)",
-    color: "white",
-    padding: "20px 40px",
-    display: "flex" as const,
-    justifyContent: "space-between",
-    alignItems: "center",
-    boxShadow: "0 4px 12px rgba(0, 0, 0, 0.15)",
-  },
-  navTitle: {
-    margin: 0,
-    fontSize: "22px",
-    fontWeight: "bold" as const,
-  },
-  navLink: {
-    color: "white",
+  headerAction: {
+    padding: "7px 10px",
+    borderRadius: "999px",
+    background: "#eef6ff",
+    color: "#2f7fbe",
+    fontSize: "12px",
+    fontWeight: 700,
     textDecoration: "none",
-    margin: "0 15px",
-    fontSize: "14px",
-    fontWeight: "500" as const,
   },
-  navButton: {
-    background: "transparent",
+  headerButton: {
+    padding: "7px 10px",
+    borderRadius: "999px",
+    background: "#eef6ff",
+    color: "#2f7fbe",
+    fontSize: "12px",
+    fontWeight: 700,
     border: "none",
-    color: "white",
-    margin: "0 15px",
-    padding: 0,
-    fontSize: "14px",
-    fontWeight: "500" as const,
     cursor: "pointer",
   },
   content: {
     padding: "24px 50px",
     width: "100%",
     margin: "0",
-    background: "white",
-    borderRadius: "0",
-    boxShadow: "none",
+    background: "rgba(255,255,255,0.96)",
+    borderRadius: "12px",
+    boxShadow: "0 18px 36px rgba(58, 95, 130, 0.12)",
+    border: "1px solid rgba(145, 180, 210, 0.24)",
     flex: 1,
     overflowY: "auto" as const,
   },
   pageTitle: {
-    color: "#1e3c72",
+    color: "#275173",
     fontSize: "32px",
     margin: "0 0 10px 0",
     fontWeight: "bold" as const,
   },
   errorText: {
-    color: "#c62828",
+    color: "#bc4a38",
     marginBottom: "10px",
   },
   table: {

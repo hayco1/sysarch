@@ -11,6 +11,7 @@ export interface Event {
   title: string;
   date: string;
   location: string;
+  imageUrl: string;
 }
 
 export interface ActivityLog {
@@ -65,36 +66,42 @@ export const mockEvents: Event[] = [
     title: "Basketball League",
     date: "2026-02-28",
     location: "Barangay Hall",
+    imageUrl: "https://images.unsplash.com/photo-1519861531473-9200262188bf?auto=format&fit=crop&w=900&q=80",
   },
   {
     id: 2,
     title: "Feeding Program",
     date: "2026-03-05",
     location: "Barangay 420",
+    imageUrl: "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&w=900&q=80",
   },
   {
     id: 3,
     title: "Barangay Assembly Day",
     date: "2026-03-10",
     location: "Sampaloc, Manila",
+    imageUrl: "https://images.unsplash.com/photo-1517457373958-b7bdd4587205?auto=format&fit=crop&w=900&q=80",
   },
   {
     id: 4,
     title: "Medical Mission",
     date: "2026-03-15",
     location: "Barangay 420",
+    imageUrl: "https://images.unsplash.com/photo-1584515933487-779824d29309?auto=format&fit=crop&w=900&q=80",
   },
   {
     id: 5,
     title: "Sports Relief Program",
     date: "2026-03-20",
     location: "Sports Field",
+    imageUrl: "https://images.unsplash.com/photo-1508609349937-5ec4ae374ebf?auto=format&fit=crop&w=900&q=80",
   },
   {
     id: 6,
     title: "Graduation Ceremony",
     date: "2026-03-25",
     location: "Community Center",
+    imageUrl: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=900&q=80",
   },
 ];
 
