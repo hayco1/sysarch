@@ -1,7 +1,1015 @@
 {
-  "users": [],
-  "residents": [],
+  "users": [
+    {
+      "id": "0cc1ba1c-ab93-46f6-a852-3fa0b161c3bd",
+      "username": "Test User 1775518546",
+      "firstName": "Test",
+      "middleName": "",
+      "lastName": "User1775518546",
+      "email": "user1775518546@example.com",
+      "contactNumber": "09123456789",
+      "address": "Test Address",
+      "password": "$2b$10$xVkEyGxQuUNeGd38hR3Ng.vDatRhkCWmm5nhrjsJCF3FuJffGxDLC",
+      "role": "resident"
+    },
+    {
+      "id": "aa87797f-7057-4778-8928-78c7c2bfeef4",
+      "username": "la la la",
+      "firstName": "la",
+      "middleName": "la",
+      "lastName": "la",
+      "email": "la@gmail.com",
+      "contactNumber": "09562269665",
+      "address": "22 Campupot Street Roxas District",
+      "password": "$2b$10$QOhIczxnRQHUPswcVZXtu.s4RncvMW6ctllQWD.umxIavcrvDsXxq",
+      "role": "resident"
+    },
+    {
+      "id": "7a26ab1a-264f-4cf7-8e49-4580b560f2eb",
+      "username": "laa laa laa",
+      "firstName": "laa",
+      "middleName": "laa",
+      "lastName": "laa",
+      "email": "laa@gmail.com",
+      "contactNumber": "09562269665",
+      "address": "22 Campupot Street Roxas District",
+      "password": "$2b$10$MsGA/d5o0IydJkDho842NuEQDX/Ho5eVdz6cViouxhEtbxTGSse1q",
+      "role": "secretary"
+    },
+    {
+      "id": "c25da4be-feab-4591-a60c-233725c42a38",
+      "username": "laaa laaa laaa",
+      "firstName": "laaa",
+      "middleName": "laaa",
+      "lastName": "laaa",
+      "email": "laaa@gmail.com",
+      "contactNumber": "09562269665",
+      "address": "22 Campupot Street Roxas District",
+      "password": "$2b$10$CPGF/tUjzvTVGlMvBhfZpOph3w7YEudpqVuSNmQbVM1Sr6wIHCMAW",
+      "role": "staff"
+    },
+    {
+      "id": "seed-secretary-1",
+      "username": "sec.miranda",
+      "firstName": "Elena",
+      "middleName": "Ramos",
+      "lastName": "Miranda",
+      "email": "elena.miranda@barangay420.local",
+      "contactNumber": "09170000001",
+      "address": "Barangay Hall, Zone 43",
+      "password": "$2b$10$6nIN6NewJxVPmBhcziqWjOFvZ7HWIMOSlJN4/3dNL.jDL64A6Vta.",
+      "role": "secretary"
+    },
+    {
+      "id": "seed-staff-1",
+      "username": "staff.lopez",
+      "firstName": "Marco",
+      "middleName": "Diaz",
+      "lastName": "Lopez",
+      "email": "marco.lopez@barangay420.local",
+      "contactNumber": "09170000002",
+      "address": "Purok 1, Barangay 420",
+      "password": "$2b$10$6nIN6NewJxVPmBhcziqWjOFvZ7HWIMOSlJN4/3dNL.jDL64A6Vta.",
+      "role": "staff"
+    },
+    {
+      "id": "seed-resident-1",
+      "username": "rosa.santos",
+      "firstName": "Rosa",
+      "middleName": "Flores",
+      "lastName": "Santos",
+      "email": "rosa.santos@barangay420.local",
+      "contactNumber": "09170000003",
+      "address": "22 Campupot Street, Roxas District",
+      "password": "$2b$10$6nIN6NewJxVPmBhcziqWjOFvZ7HWIMOSlJN4/3dNL.jDL64A6Vta.",
+      "role": "resident"
+    },
+    {
+      "id": "seed-resident-2",
+      "username": "victor.cruz",
+      "firstName": "Victor",
+      "middleName": "Luna",
+      "lastName": "Cruz",
+      "email": "victor.cruz@barangay420.local",
+      "contactNumber": "09170000004",
+      "address": "18 Sevilla Street, Sampaloc",
+      "password": "$2b$10$6nIN6NewJxVPmBhcziqWjOFvZ7HWIMOSlJN4/3dNL.jDL64A6Vta.",
+      "role": "resident"
+    },
+    {
+      "id": "seed-resident-3",
+      "username": "maria.garcia",
+      "firstName": "Maria",
+      "middleName": "Reyes",
+      "lastName": "Garcia",
+      "email": "maria.garcia@barangay420.local",
+      "contactNumber": "09170000005",
+      "address": "5 Lerma Street, Sampaloc",
+      "password": "$2b$10$6nIN6NewJxVPmBhcziqWjOFvZ7HWIMOSlJN4/3dNL.jDL64A6Vta.",
+      "role": "resident"
+    },
+    {
+      "id": "seed-resident-4",
+      "username": "andres.navarro",
+      "firstName": "Andres",
+      "middleName": "Tolentino",
+      "lastName": "Navarro",
+      "email": "andres.navarro@barangay420.local",
+      "contactNumber": "09170000006",
+      "address": "12 Dapitan Street, Sampaloc",
+      "password": "$2b$10$6nIN6NewJxVPmBhcziqWjOFvZ7HWIMOSlJN4/3dNL.jDL64A6Vta.",
+      "role": "resident"
+    },
+    {
+      "id": "seed-resident-5",
+      "username": "liza.rivera",
+      "firstName": "Liza",
+      "middleName": "Torres",
+      "lastName": "Rivera",
+      "email": "liza.rivera@barangay420.local",
+      "contactNumber": "09170000007",
+      "address": "34 Piy Margal Street, Sampaloc",
+      "password": "$2b$10$oQIPA7dAQbPEOPob6IH0p.l/dMMUZqfJyMvZI5RnKkZVw0J9ojLBC",
+      "role": "resident"
+    },
+    {
+      "id": "seed-resident-6",
+      "username": "noel.castillo",
+      "firstName": "Noel",
+      "middleName": "Santos",
+      "lastName": "Castillo",
+      "email": "noel.castillo@barangay420.local",
+      "contactNumber": "09170000008",
+      "address": "19 Bustillos Street, Sampaloc",
+      "password": "$2b$10$oQIPA7dAQbPEOPob6IH0p.l/dMMUZqfJyMvZI5RnKkZVw0J9ojLBC",
+      "role": "resident"
+    },
+    {
+      "id": "seed-resident-7",
+      "username": "grace.mendoza",
+      "firstName": "Grace",
+      "middleName": "Perez",
+      "lastName": "Mendoza",
+      "email": "grace.mendoza@barangay420.local",
+      "contactNumber": "09170000009",
+      "address": "8 P. Noval Street, Sampaloc",
+      "password": "$2b$10$oQIPA7dAQbPEOPob6IH0p.l/dMMUZqfJyMvZI5RnKkZVw0J9ojLBC",
+      "role": "resident"
+    },
+    {
+      "id": "seed-resident-8",
+      "username": "ramon.deleon",
+      "firstName": "Ramon",
+      "middleName": "Aquino",
+      "lastName": "De Leon",
+      "email": "ramon.deleon@barangay420.local",
+      "contactNumber": "09170000010",
+      "address": "42 Galicia Street, Sampaloc",
+      "password": "$2b$10$oQIPA7dAQbPEOPob6IH0p.l/dMMUZqfJyMvZI5RnKkZVw0J9ojLBC",
+      "role": "resident"
+    }
+  ],
+  "residents": [
+    {
+      "id": "4c6e44d8-710f-4850-92f7-a214714d031f",
+      "userId": "aa87797f-7057-4778-8928-78c7c2bfeef4",
+      "name": "la la la",
+      "email": "la@gmail.com",
+      "contactNumber": "09562269665",
+      "address": "22 Campupot Street Roxas District",
+      "household": "22",
+      "membersCount": 1,
+      "age": 21,
+      "birthDate": "2005-02-22",
+      "gender": "Male",
+      "civilStatus": "Single",
+      "occupation": "22",
+      "is_pwd": true,
+      "citizenship": "Filipino",
+      "notes": "",
+      "status": "Pending",
+      "createdAt": "2026-04-06T23:45:19.418Z",
+      "updatedAt": "2026-04-29T16:45:57.569Z",
+      "householdMembers": [
+        {
+          "id": "1a0b569a-9a56-4277-82b6-cb4ecb790195",
+          "fullName": "laa",
+          "relationship": "Niece",
+          "age": 25,
+          "gender": "Male",
+          "occupation": "Student",
+          "civilStatus": "Single"
+        }
+      ],
+      "beneficiarySelectionCount": 0,
+      "lastBeneficiarySelectedAt": ""
+    },
+    {
+      "id": "12146fe3-5b6f-463f-a708-ec97fb7b7daa",
+      "userId": "",
+      "name": "roma",
+      "email": "la@gmail.com",
+      "contactNumber": "09562269665",
+      "address": "22 Campupot Street Roxas District",
+      "household": "22",
+      "membersCount": 8,
+      "age": 0,
+      "birthDate": "2222-02-22",
+      "gender": "",
+      "civilStatus": "Single",
+      "occupation": "wala",
+      "is_pwd": true,
+      "citizenship": "Filipino",
+      "notes": "",
+      "status": "Pending",
+      "createdAt": "2026-04-07T00:26:35.446Z",
+      "updatedAt": "2026-04-29T17:52:36.197Z",
+      "beneficiarySelectionCount": 1,
+      "lastBeneficiarySelectedAt": "2026-04-29T17:52:36.197Z",
+      "householdMembers": []
+    },
+    {
+      "id": "seed-resident-record-1",
+      "userId": "seed-resident-1",
+      "name": "Rosa Flores Santos",
+      "email": "rosa.santos@barangay420.local",
+      "contactNumber": "09170000003",
+      "address": "22 Campupot Street, Roxas District",
+      "household": "HH-420-001",
+      "membersCount": 4,
+      "age": 67,
+      "birthDate": "1958-08-14",
+      "gender": "Female",
+      "civilStatus": "Widowed",
+      "occupation": "Retired Vendor",
+      "is_pwd": false,
+      "citizenship": "Filipino",
+      "notes": "Senior citizen beneficiary.",
+      "status": "Claimed",
+      "householdMembers": [
+        {
+          "id": "seed-r1-m1",
+          "fullName": "Rosa Flores Santos",
+          "relationship": "Head",
+          "age": 67,
+          "gender": "Female",
+          "occupation": "Retired Vendor",
+          "civilStatus": "Widowed"
+        },
+        {
+          "id": "seed-r1-m2",
+          "fullName": "Joel Santos",
+          "relationship": "Son",
+          "age": 39,
+          "gender": "Male",
+          "occupation": "Driver",
+          "civilStatus": "Married"
+        },
+        {
+          "id": "seed-r1-m3",
+          "fullName": "Mila Santos",
+          "relationship": "Daughter-in-law",
+          "age": 36,
+          "gender": "Female",
+          "occupation": "Cashier",
+          "civilStatus": "Married"
+        },
+        {
+          "id": "seed-r1-m4",
+          "fullName": "Ella Santos",
+          "relationship": "Grandchild",
+          "age": 11,
+          "gender": "Female",
+          "occupation": "Student",
+          "civilStatus": "Single"
+        }
+      ],
+      "createdAt": "2026-04-22T03:02:33.721Z",
+      "updatedAt": "2026-04-22T03:02:33.722Z",
+      "beneficiarySelectionCount": 0,
+      "lastBeneficiarySelectedAt": "2026-04-29T15:51:33.301Z"
+    },
+    {
+      "id": "seed-resident-record-2",
+      "userId": "seed-resident-2",
+      "name": "Victor Luna Cruz",
+      "email": "victor.cruz@barangay420.local",
+      "contactNumber": "09170000004",
+      "address": "18 Sevilla Street, Sampaloc",
+      "household": "HH-420-002",
+      "membersCount": 3,
+      "age": 61,
+      "birthDate": "1964-02-03",
+      "gender": "Male",
+      "civilStatus": "Married",
+      "occupation": "Security Guard",
+      "is_pwd": true,
+      "citizenship": "Filipino",
+      "notes": "PWD and senior monitoring needed.",
+      "status": "Pending",
+      "householdMembers": [
+        {
+          "id": "seed-r2-m1",
+          "fullName": "Victor Luna Cruz",
+          "relationship": "Head",
+          "age": 61,
+          "gender": "Male",
+          "occupation": "Security Guard",
+          "civilStatus": "Married"
+        },
+        {
+          "id": "seed-r2-m2",
+          "fullName": "Lina Cruz",
+          "relationship": "Spouse",
+          "age": 58,
+          "gender": "Female",
+          "occupation": "Seamstress",
+          "civilStatus": "Married"
+        },
+        {
+          "id": "seed-r2-m3",
+          "fullName": "Paolo Cruz",
+          "relationship": "Son",
+          "age": 22,
+          "gender": "Male",
+          "occupation": "Student",
+          "civilStatus": "Single"
+        }
+      ],
+      "createdAt": "2026-04-22T03:02:33.722Z",
+      "updatedAt": "2026-04-22T03:02:33.722Z",
+      "beneficiarySelectionCount": 0,
+      "lastBeneficiarySelectedAt": "2026-04-29T15:51:33.302Z"
+    },
+    {
+      "id": "seed-resident-record-3",
+      "userId": "seed-resident-3",
+      "name": "Maria Reyes Garcia",
+      "email": "maria.garcia@barangay420.local",
+      "contactNumber": "09170000005",
+      "address": "5 Lerma Street, Sampaloc",
+      "household": "HH-420-003",
+      "membersCount": 5,
+      "age": 34,
+      "birthDate": "1991-01-24",
+      "gender": "Female",
+      "civilStatus": "Married",
+      "occupation": "Online Seller",
+      "is_pwd": false,
+      "citizenship": "Filipino",
+      "notes": "Household with one senior dependent.",
+      "status": "Pending",
+      "householdMembers": [
+        {
+          "id": "seed-r3-m1",
+          "fullName": "Maria Reyes Garcia",
+          "relationship": "Head",
+          "age": 34,
+          "gender": "Female",
+          "occupation": "Online Seller",
+          "civilStatus": "Married"
+        },
+        {
+          "id": "seed-r3-m2",
+          "fullName": "Carlo Garcia",
+          "relationship": "Spouse",
+          "age": 35,
+          "gender": "Male",
+          "occupation": "Mechanic",
+          "civilStatus": "Married"
+        },
+        {
+          "id": "seed-r3-m3",
+          "fullName": "Lolo Ernesto Reyes",
+          "relationship": "Father",
+          "age": 72,
+          "gender": "Male",
+          "occupation": "Retired",
+          "civilStatus": "Widowed"
+        },
+        {
+          "id": "seed-r3-m4",
+          "fullName": "Celine Garcia",
+          "relationship": "Child",
+          "age": 10,
+          "gender": "Female",
+          "occupation": "Student",
+          "civilStatus": "Single"
+        },
+        {
+          "id": "seed-r3-m5",
+          "fullName": "Kyle Garcia",
+          "relationship": "Child",
+          "age": 7,
+          "gender": "Male",
+          "occupation": "Student",
+          "civilStatus": "Single"
+        }
+      ],
+      "createdAt": "2026-04-22T03:02:33.722Z",
+      "updatedAt": "2026-04-22T03:02:33.722Z",
+      "beneficiarySelectionCount": 0,
+      "lastBeneficiarySelectedAt": "2026-04-29T15:51:33.302Z"
+    },
+    {
+      "id": "seed-resident-record-4",
+      "userId": "seed-resident-4",
+      "name": "Andres Tolentino Navarro",
+      "email": "andres.navarro@barangay420.local",
+      "contactNumber": "09170000006",
+      "address": "12 Dapitan Street, Sampaloc",
+      "household": "HH-420-004",
+      "membersCount": 2,
+      "age": 46,
+      "birthDate": "1979-06-17",
+      "gender": "Male",
+      "civilStatus": "Separated",
+      "occupation": "Tricycle Driver",
+      "is_pwd": true,
+      "citizenship": "Filipino",
+      "notes": "PWD assistance follow-up.",
+      "status": "Claimed",
+      "householdMembers": [
+        {
+          "id": "seed-r4-m1",
+          "fullName": "Andres Tolentino Navarro",
+          "relationship": "Head",
+          "age": 46,
+          "gender": "Male",
+          "occupation": "Tricycle Driver",
+          "civilStatus": "Separated"
+        },
+        {
+          "id": "seed-r4-m2",
+          "fullName": "Anne Navarro",
+          "relationship": "Daughter",
+          "age": 16,
+          "gender": "Female",
+          "occupation": "Student",
+          "civilStatus": "Single"
+        }
+      ],
+      "createdAt": "2026-04-22T03:02:33.722Z",
+      "updatedAt": "2026-04-22T03:02:33.722Z",
+      "beneficiarySelectionCount": 0,
+      "lastBeneficiarySelectedAt": "2026-04-29T15:51:33.302Z"
+    },
+    {
+      "id": "seed-resident-record-5",
+      "userId": "seed-resident-5",
+      "name": "Liza Torres Rivera",
+      "email": "liza.rivera@barangay420.local",
+      "contactNumber": "09170000007",
+      "address": "34 Piy Margal Street, Sampaloc",
+      "household": "HH-420-005",
+      "membersCount": 6,
+      "age": 58,
+      "birthDate": "1968-03-22",
+      "gender": "Female",
+      "civilStatus": "Married",
+      "occupation": "Market Vendor",
+      "is_pwd": false,
+      "citizenship": "Filipino",
+      "notes": "Household includes two school-age dependents.",
+      "status": "Pending",
+      "beneficiarySelectionCount": 2,
+      "lastBeneficiarySelectedAt": "2026-04-29T17:16:19.777Z",
+      "householdMembers": [
+        {
+          "id": "seed-r5-m1",
+          "fullName": "Liza Torres Rivera",
+          "relationship": "Head",
+          "age": 58,
+          "gender": "Female",
+          "occupation": "Market Vendor",
+          "civilStatus": "Married"
+        },
+        {
+          "id": "seed-r5-m2",
+          "fullName": "Mario Rivera",
+          "relationship": "Spouse",
+          "age": 60,
+          "gender": "Male",
+          "occupation": "Construction Worker",
+          "civilStatus": "Married"
+        },
+        {
+          "id": "seed-r5-m3",
+          "fullName": "Nica Rivera",
+          "relationship": "Daughter",
+          "age": 18,
+          "gender": "Female",
+          "occupation": "Student",
+          "civilStatus": "Single"
+        },
+        {
+          "id": "seed-r5-m4",
+          "fullName": "Jules Rivera",
+          "relationship": "Son",
+          "age": 15,
+          "gender": "Male",
+          "occupation": "Student",
+          "civilStatus": "Single"
+        },
+        {
+          "id": "seed-r5-m5",
+          "fullName": "Aida Torres",
+          "relationship": "Mother",
+          "age": 79,
+          "gender": "Female",
+          "occupation": "Retired",
+          "civilStatus": "Widowed"
+        },
+        {
+          "id": "seed-r5-m6",
+          "fullName": "Ben Torres",
+          "relationship": "Brother",
+          "age": 49,
+          "gender": "Male",
+          "occupation": "Driver",
+          "civilStatus": "Single"
+        }
+      ],
+      "createdAt": "2026-04-29T17:16:19.777Z",
+      "updatedAt": "2026-04-29T17:16:19.777Z"
+    },
+    {
+      "id": "seed-resident-record-6",
+      "userId": "seed-resident-6",
+      "name": "Noel Santos Castillo",
+      "email": "noel.castillo@barangay420.local",
+      "contactNumber": "09170000008",
+      "address": "19 Bustillos Street, Sampaloc",
+      "household": "HH-420-006",
+      "membersCount": 4,
+      "age": 63,
+      "birthDate": "1963-11-09",
+      "gender": "Male",
+      "civilStatus": "Married",
+      "occupation": "Retired Messenger",
+      "is_pwd": false,
+      "citizenship": "Filipino",
+      "notes": "Senior citizen for assistance review.",
+      "status": "Claimed",
+      "beneficiarySelectionCount": 6,
+      "lastBeneficiarySelectedAt": "2026-04-29T17:16:19.777Z",
+      "householdMembers": [
+        {
+          "id": "seed-r6-m1",
+          "fullName": "Noel Santos Castillo",
+          "relationship": "Head",
+          "age": 63,
+          "gender": "Male",
+          "occupation": "Retired Messenger",
+          "civilStatus": "Married"
+        },
+        {
+          "id": "seed-r6-m2",
+          "fullName": "Teresita Castillo",
+          "relationship": "Spouse",
+          "age": 61,
+          "gender": "Female",
+          "occupation": "Homemaker",
+          "civilStatus": "Married"
+        },
+        {
+          "id": "seed-r6-m3",
+          "fullName": "Nolan Castillo",
+          "relationship": "Son",
+          "age": 28,
+          "gender": "Male",
+          "occupation": "Crew Member",
+          "civilStatus": "Single"
+        },
+        {
+          "id": "seed-r6-m4",
+          "fullName": "Rica Castillo",
+          "relationship": "Daughter",
+          "age": 24,
+          "gender": "Female",
+          "occupation": "Office Clerk",
+          "civilStatus": "Single"
+        }
+      ],
+      "createdAt": "2026-04-29T17:16:19.777Z",
+      "updatedAt": "2026-04-29T17:16:19.777Z"
+    },
+    {
+      "id": "seed-resident-record-7",
+      "userId": "seed-resident-7",
+      "name": "Grace Perez Mendoza",
+      "email": "grace.mendoza@barangay420.local",
+      "contactNumber": "09170000009",
+      "address": "8 P. Noval Street, Sampaloc",
+      "household": "HH-420-007",
+      "membersCount": 3,
+      "age": 42,
+      "birthDate": "1984-07-05",
+      "gender": "Female",
+      "civilStatus": "Single",
+      "occupation": "Laundry Shop Attendant",
+      "is_pwd": true,
+      "citizenship": "Filipino",
+      "notes": "PWD support and medical follow-up.",
+      "status": "Pending",
+      "beneficiarySelectionCount": 3,
+      "lastBeneficiarySelectedAt": "2026-04-29T17:16:19.777Z",
+      "householdMembers": [
+        {
+          "id": "seed-r7-m1",
+          "fullName": "Grace Perez Mendoza",
+          "relationship": "Head",
+          "age": 42,
+          "gender": "Female",
+          "occupation": "Laundry Shop Attendant",
+          "civilStatus": "Single"
+        },
+        {
+          "id": "seed-r7-m2",
+          "fullName": "Letty Mendoza",
+          "relationship": "Mother",
+          "age": 69,
+          "gender": "Female",
+          "occupation": "Retired",
+          "civilStatus": "Widowed"
+        },
+        {
+          "id": "seed-r7-m3",
+          "fullName": "Mika Mendoza",
+          "relationship": "Niece",
+          "age": 13,
+          "gender": "Female",
+          "occupation": "Student",
+          "civilStatus": "Single"
+        }
+      ],
+      "createdAt": "2026-04-29T17:16:19.777Z",
+      "updatedAt": "2026-04-29T17:16:19.777Z"
+    },
+    {
+      "id": "seed-resident-record-8",
+      "userId": "seed-resident-8",
+      "name": "Ramon Aquino De Leon",
+      "email": "ramon.deleon@barangay420.local",
+      "contactNumber": "09170000010",
+      "address": "42 Galicia Street, Sampaloc",
+      "household": "HH-420-008",
+      "membersCount": 5,
+      "age": 51,
+      "birthDate": "1975-01-13",
+      "gender": "Male",
+      "civilStatus": "Married",
+      "occupation": "Jeepney Driver",
+      "is_pwd": false,
+      "citizenship": "Filipino",
+      "notes": "Claimed beneficiary under household assistance.",
+      "status": "Claimed",
+      "beneficiarySelectionCount": 2,
+      "lastBeneficiarySelectedAt": "2026-04-29T17:16:19.777Z",
+      "householdMembers": [
+        {
+          "id": "seed-r8-m1",
+          "fullName": "Ramon Aquino De Leon",
+          "relationship": "Head",
+          "age": 51,
+          "gender": "Male",
+          "occupation": "Jeepney Driver",
+          "civilStatus": "Married"
+        },
+        {
+          "id": "seed-r8-m2",
+          "fullName": "Helen De Leon",
+          "relationship": "Spouse",
+          "age": 47,
+          "gender": "Female",
+          "occupation": "Sari-sari Store Owner",
+          "civilStatus": "Married"
+        },
+        {
+          "id": "seed-r8-m3",
+          "fullName": "Mark De Leon",
+          "relationship": "Son",
+          "age": 21,
+          "gender": "Male",
+          "occupation": "Student",
+          "civilStatus": "Single"
+        },
+        {
+          "id": "seed-r8-m4",
+          "fullName": "Maine De Leon",
+          "relationship": "Daughter",
+          "age": 17,
+          "gender": "Female",
+          "occupation": "Student",
+          "civilStatus": "Single"
+        },
+        {
+          "id": "seed-r8-m5",
+          "fullName": "Ruel Aquino",
+          "relationship": "Brother-in-law",
+          "age": 44,
+          "gender": "Male",
+          "occupation": "Mechanic",
+          "civilStatus": "Married"
+        }
+      ],
+      "createdAt": "2026-04-29T17:16:19.777Z",
+      "updatedAt": "2026-04-29T17:16:19.777Z"
+    }
+  ],
   "programs": [],
-  "logs": [],
+  "events": [
+    {
+      "id": "e5012348-cba0-4422-9b4d-89fa929e1dfb",
+      "title": "Barangay Assembly Day",
+      "date": "2026-05-06",
+      "location": "Barangay Hall",
+      "description": "Monthly assembly covering community concerns, open forum, and service updates.",
+      "imageUrl": "https://images.unsplash.com/photo-1517457373958-b7bdd4587205?auto=format&fit=crop&w=900&q=80",
+      "createdBy": "system",
+      "createdAt": "2026-04-22T02:09:16.170Z",
+      "updatedAt": "2026-04-22T02:09:16.170Z"
+    },
+    {
+      "id": "4d022e9e-2a12-4537-b1c0-4c134651f4f4",
+      "title": "Medical Mission",
+      "date": "2026-05-18",
+      "location": "Covered Court",
+      "description": "Free checkups, blood pressure screening, and medicine distribution for residents.",
+      "imageUrl": "https://images.unsplash.com/photo-1584515933487-779824d29309?auto=format&fit=crop&w=900&q=80",
+      "createdBy": "c25da4be-feab-4591-a60c-233725c42a38",
+      "createdAt": "2026-04-22T02:09:16.170Z",
+      "updatedAt": "2026-04-22T03:34:40.614Z"
+    },
+    {
+      "id": "bc3ff031-52fa-4471-88fd-b5ccc4f60bab",
+      "title": "slavery",
+      "date": "2026-04-23",
+      "location": "Barangay Hall",
+      "description": "cotton farmers",
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRF6aI_CkDt60FZR8Zw3nz4SlJ0eg3qokxpdg&s",
+      "createdBy": "c25da4be-feab-4591-a60c-233725c42a38",
+      "createdAt": "2026-04-22T02:24:55.522Z",
+      "updatedAt": "2026-04-22T02:25:37.926Z"
+    },
+    {
+      "id": "e138cbb4-9031-4c82-8220-432155234c9a",
+      "title": "pasabog",
+      "date": "2026-04-22",
+      "location": "Philippines",
+      "description": "takbo",
+      "imageUrl": "data:image/jpeg;base64,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",
+      "createdBy": "c25da4be-feab-4591-a60c-233725c42a38",
+      "createdAt": "2026-04-22T04:10:36.199Z",
+      "updatedAt": "2026-04-22T04:10:36.199Z"
+    }
+  ],
+  "logs": [
+    {
+      "id": "36c771cf-9a5a-4ca0-866d-b5d038c73128",
+      "action": "register (Test User 1775518546)",
+      "userId": "0cc1ba1c-ab93-46f6-a852-3fa0b161c3bd",
+      "details": "",
+      "timestamp": "2026-04-06T23:35:47.608Z"
+    },
+    {
+      "id": "70e83bee-5df9-492e-9bb6-3e492ce5e4d0",
+      "action": "login (Test User 1775518546 - resident)",
+      "userId": "0cc1ba1c-ab93-46f6-a852-3fa0b161c3bd",
+      "details": "",
+      "timestamp": "2026-04-06T23:35:48.128Z"
+    },
+    {
+      "id": "a2a3499c-d4f1-4f37-84a9-07f1cdaa8abc",
+      "action": "register (la la la)",
+      "userId": "aa87797f-7057-4778-8928-78c7c2bfeef4",
+      "details": "",
+      "timestamp": "2026-04-06T23:43:17.020Z"
+    },
+    {
+      "id": "8aef5a74-3077-402b-98f0-eb734d5f7fc1",
+      "action": "login (la la la - resident)",
+      "userId": "aa87797f-7057-4778-8928-78c7c2bfeef4",
+      "details": "",
+      "timestamp": "2026-04-06T23:43:32.293Z"
+    },
+    {
+      "id": "707e283a-bfc8-47ed-8dd1-ccd013747086",
+      "action": "create_resident_self",
+      "userId": "aa87797f-7057-4778-8928-78c7c2bfeef4",
+      "details": "",
+      "timestamp": "2026-04-06T23:45:19.419Z"
+    },
+    {
+      "id": "65095b2c-e539-41e3-b675-89fe14738ca0",
+      "action": "register (laa laa laa)",
+      "userId": "7a26ab1a-264f-4cf7-8e49-4580b560f2eb",
+      "details": "",
+      "timestamp": "2026-04-06T23:46:41.533Z"
+    },
+    {
+      "id": "e87ee579-e326-443d-90c8-d43f0758d98b",
+      "action": "login (laa laa laa - secretary)",
+      "userId": "7a26ab1a-264f-4cf7-8e49-4580b560f2eb",
+      "details": "",
+      "timestamp": "2026-04-06T23:46:58.533Z"
+    },
+    {
+      "id": "56145592-0614-4d58-8f45-bf229bd7a6cf",
+      "action": "login (la la la - resident)",
+      "userId": "aa87797f-7057-4778-8928-78c7c2bfeef4",
+      "details": "",
+      "timestamp": "2026-04-06T23:50:13.214Z"
+    },
+    {
+      "id": "b9be7226-dea3-4fae-a4aa-82202e5a0414",
+      "action": "login (la la la - resident)",
+      "userId": "aa87797f-7057-4778-8928-78c7c2bfeef4",
+      "details": "",
+      "timestamp": "2026-04-07T00:01:25.578Z"
+    },
+    {
+      "id": "6400ee5c-01ec-4968-a973-fea8974dd154",
+      "action": "login (laa laa laa - secretary)",
+      "userId": "7a26ab1a-264f-4cf7-8e49-4580b560f2eb",
+      "details": "",
+      "timestamp": "2026-04-07T00:25:15.872Z"
+    },
+    {
+      "id": "620fc2e4-131c-41e5-a8df-74da3757cf34",
+      "action": "create_resident",
+      "userId": "7a26ab1a-264f-4cf7-8e49-4580b560f2eb",
+      "details": "",
+      "timestamp": "2026-04-07T00:26:35.447Z"
+    },
+    {
+      "id": "8ddb8ec8-2de8-44eb-9a3a-4774ef3caa41",
+      "action": "register (laaa laaa laaa)",
+      "userId": "c25da4be-feab-4591-a60c-233725c42a38",
+      "details": "",
+      "timestamp": "2026-04-07T00:27:50.377Z"
+    },
+    {
+      "id": "abb36eaa-8a75-4bf0-b345-a8fd19321473",
+      "action": "login (laaa laaa laaa - staff)",
+      "userId": "c25da4be-feab-4591-a60c-233725c42a38",
+      "details": "",
+      "timestamp": "2026-04-07T00:28:04.223Z"
+    },
+    {
+      "id": "23d9ab82-07d3-46b9-a804-b13f49e9ac86",
+      "action": "login (la la la - resident)",
+      "userId": "aa87797f-7057-4778-8928-78c7c2bfeef4",
+      "details": "",
+      "timestamp": "2026-04-22T02:10:18.998Z"
+    },
+    {
+      "id": "c8bdeb30-6cdc-4239-b682-7dee09acd21f",
+      "action": "login (laa laa laa - secretary)",
+      "userId": "7a26ab1a-264f-4cf7-8e49-4580b560f2eb",
+      "details": "",
+      "timestamp": "2026-04-22T02:12:12.523Z"
+    },
+    {
+      "id": "eb656545-2465-4b51-bdb1-4529f57b0433",
+      "action": "login (laaa laaa laaa - staff)",
+      "userId": "c25da4be-feab-4591-a60c-233725c42a38",
+      "details": "",
+      "timestamp": "2026-04-22T02:23:44.709Z"
+    },
+    {
+      "id": "29ae1948-0013-4270-83a7-560e809498c5",
+      "action": "create_event",
+      "userId": "c25da4be-feab-4591-a60c-233725c42a38",
+      "details": "slavery",
+      "timestamp": "2026-04-22T02:24:55.522Z"
+    },
+    {
+      "id": "71828911-b57d-4403-8077-1825e05df583",
+      "action": "update_event",
+      "userId": "c25da4be-feab-4591-a60c-233725c42a38",
+      "details": "slavery",
+      "timestamp": "2026-04-22T02:25:37.926Z"
+    },
+    {
+      "id": "ef63a5c9-889a-4a9a-9550-068d8a2b13d6",
+      "action": "login (la la la - resident)",
+      "userId": "aa87797f-7057-4778-8928-78c7c2bfeef4",
+      "details": "",
+      "timestamp": "2026-04-22T02:26:42.778Z"
+    },
+    {
+      "id": "bfd71273-e180-476c-b3ea-dae12254e202",
+      "action": "login (la la la - resident)",
+      "userId": "aa87797f-7057-4778-8928-78c7c2bfeef4",
+      "details": "",
+      "timestamp": "2026-04-22T02:59:36.313Z"
+    },
+    {
+      "id": "a26955e1-dc66-4984-ad18-c2837ace88f0",
+      "action": "login (la la la - resident)",
+      "userId": "aa87797f-7057-4778-8928-78c7c2bfeef4",
+      "details": "",
+      "timestamp": "2026-04-22T03:12:37.449Z"
+    },
+    {
+      "id": "f1c0223a-073e-49bc-9c75-cd374fb3dda8",
+      "action": "login (la la la - resident)",
+      "userId": "aa87797f-7057-4778-8928-78c7c2bfeef4",
+      "details": "",
+      "timestamp": "2026-04-22T03:19:59.993Z"
+    },
+    {
+      "id": "adf0a41c-eae0-45d2-8485-085a87c3bd86",
+      "action": "update_resident_self",
+      "userId": "aa87797f-7057-4778-8928-78c7c2bfeef4",
+      "details": "",
+      "timestamp": "2026-04-22T03:22:16.990Z"
+    },
+    {
+      "id": "23c86d83-bc0e-4c11-85f4-8c32ed67e092",
+      "action": "login (laa laa laa - secretary)",
+      "userId": "7a26ab1a-264f-4cf7-8e49-4580b560f2eb",
+      "details": "",
+      "timestamp": "2026-04-22T03:22:34.665Z"
+    },
+    {
+      "id": "599bd81a-7a78-4cc0-9e48-ae5dbe449a45",
+      "action": "login (la la la - resident)",
+      "userId": "aa87797f-7057-4778-8928-78c7c2bfeef4",
+      "details": "",
+      "timestamp": "2026-04-22T03:32:53.365Z"
+    },
+    {
+      "id": "323ae8fd-69b2-4c49-9782-f13b0a5f11d0",
+      "action": "login (laaa laaa laaa - staff)",
+      "userId": "c25da4be-feab-4591-a60c-233725c42a38",
+      "details": "",
+      "timestamp": "2026-04-22T03:33:41.149Z"
+    },
+    {
+      "id": "7635e1d3-f339-4d73-83fe-08ad7adf6acc",
+      "action": "update_event",
+      "userId": "c25da4be-feab-4591-a60c-233725c42a38",
+      "details": "Medical Mission",
+      "timestamp": "2026-04-22T03:34:40.614Z"
+    },
+    {
+      "id": "eb43792c-acaa-4255-9d58-8d9770df9c53",
+      "action": "create_event",
+      "userId": "c25da4be-feab-4591-a60c-233725c42a38",
+      "details": "pasabog",
+      "timestamp": "2026-04-22T04:10:36.199Z"
+    },
+    {
+      "id": "a71ea1f6-f3c7-4083-a141-f05c4ab3dfa5",
+      "action": "login (la la la - resident)",
+      "userId": "aa87797f-7057-4778-8928-78c7c2bfeef4",
+      "details": "",
+      "timestamp": "2026-04-29T11:57:52.210Z"
+    },
+    {
+      "id": "8ed7190f-8ccf-413d-ba5f-4e6a418d5c38",
+      "action": "login (la la la - resident)",
+      "userId": "aa87797f-7057-4778-8928-78c7c2bfeef4",
+      "details": "",
+      "timestamp": "2026-04-29T16:44:02.756Z"
+    },
+    {
+      "id": "918d9083-f85f-4f82-880c-499954223086",
+      "action": "update_resident_self",
+      "userId": "aa87797f-7057-4778-8928-78c7c2bfeef4",
+      "details": "",
+      "timestamp": "2026-04-29T16:45:57.570Z"
+    },
+    {
+      "id": "a5166642-e5be-4578-937f-ec3143e4ac55",
+      "action": "login (laa laa laa - secretary)",
+      "userId": "7a26ab1a-264f-4cf7-8e49-4580b560f2eb",
+      "details": "",
+      "timestamp": "2026-04-29T16:46:29.791Z"
+    },
+    {
+      "id": "4c71e00a-c449-474f-9fe3-b2b036bf2b7f",
+      "action": "login (laa laa laa - secretary)",
+      "userId": "7a26ab1a-264f-4cf7-8e49-4580b560f2eb",
+      "details": "",
+      "timestamp": "2026-04-29T17:52:02.545Z"
+    },
+    {
+      "id": "fd0521f1-feab-4354-a53f-af2b5c21c7ef",
+      "action": "select_beneficiary",
+      "userId": "7a26ab1a-264f-4cf7-8e49-4580b560f2eb",
+      "details": "12146fe3-5b6f-463f-a708-ec97fb7b7daa",
+      "timestamp": "2026-04-29T17:52:36.198Z"
+    },
+    {
+      "id": "525fdd51-242c-4b6a-8392-c36921c422c9",
+      "action": "login (laa laa laa - secretary)",
+      "userId": "7a26ab1a-264f-4cf7-8e49-4580b560f2eb",
+      "details": "",
+      "timestamp": "2026-04-29T17:58:44.826Z"
+    }
+  ],
   "backups": []
 }

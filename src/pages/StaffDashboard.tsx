@@ -1,281 +1,418 @@
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
-import { mockEvents, type Event } from "../data/mockData";
-import PortalHeader from "../components/PortalHeader";
+import WorkspaceShell from "../components/WorkspaceShell";
+import { useAuth } from "../contexts/useAuth";
+import {
+  createEvent,
+  deleteEvent,
+  fetchEvents,
+  updateEvent,
+  type EventRecord,
+} from "../services/authService";
+
+type StaffSection = "overview" | "manage" | "published";
+
+type EventForm = Omit<EventRecord, "id">;
+
+const INITIAL_FORM: EventForm = {
+  title: "",
+  date: "",
+  location: "Barangay Hall",
+  description: "",
+  imageUrl: "",
+  createdBy: "",
+  createdAt: "",
+  updatedAt: "",
+};
 
 export default function StaffDashboard() {
   const navigate = useNavigate();
-  const [events, setEvents] = useState(mockEvents);
-  const [showAddForm, setShowAddForm] = useState(false);
-  const [newEventTitle, setNewEventTitle] = useState("");
-  const [newEventDate, setNewEventDate] = useState("");
-  const [currentTab, setCurrentTab] = useState<"home" | "events">("home");
+  const { user, logout } = useAuth();
+  const [section, setSection] = useState<StaffSection>("overview");
+  const [events, setEvents] = useState<EventRecord[]>([]);
+  const [form, setForm] = useState<EventForm>(INITIAL_FORM);
+  const [editing, setEditing] = useState<EventRecord | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState("");
+  const [info, setInfo] = useState("");
 
-  const addEvent = () => {
-    if (newEventTitle.trim()) {
-      const newEvent = {
-        id: events.length + 1,
-        title: newEventTitle,
-        date: newEventDate || new Date().toISOString().split("T")[0],
-        location: "Barangay 420",
-        imageUrl: "https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=900&q=80",
-      };
-      setEvents([...events, newEvent]);
-      setNewEventTitle("");
-      setNewEventDate("");
-      setShowAddForm(false);
+  async function loadEvents() {
+    try {
+      const data = await fetchEvents();
+      setEvents(data || []);
+    } catch (err) {
+      const nextError = err && typeof err === "object" && "error" in err ? String((err as { error: unknown }).error) : "Failed to load events";
+      setError(nextError);
+    } finally {
+      setLoading(false);
     }
-  };
+  }
 
-  const deleteEvent = (id: number) => {
-    setEvents(events.filter((e) => e.id !== id));
-  };
+  useEffect(() => {
+    loadEvents();
+  }, []);
 
-  const handleLogout = () => {
+  const upcomingEvents = useMemo(
+    () => [...events].sort((a, b) => a.date.localeCompare(b.date)),
+    [events]
+  );
+
+  const nextEvent = upcomingEvents[0] ?? null;
+  const thisMonthCount = upcomingEvents.filter((event) => {
+    const date = new Date(event.date);
+    const now = new Date();
+    return date.getMonth() === now.getMonth() && date.getFullYear() === now.getFullYear();
+  }).length;
+
+  function updateFormValue<K extends keyof EventForm>(key: K, value: EventForm[K]) {
+    setForm((current) => ({ ...current, [key]: value }));
+  }
+
+  function startEdit(event: EventRecord) {
+    setEditing(event);
+    setForm({ ...INITIAL_FORM, ...event });
+    setSection("manage");
+  }
+
+  function resetForm() {
+    setEditing(null);
+    setForm({ ...INITIAL_FORM, createdBy: user?.id || "" });
+  }
+
+  async function handleSubmit(event: React.FormEvent) {
+    event.preventDefault();
+    setSaving(true);
+    setError("");
+    setInfo("");
+
+    const payload: EventForm = {
+      ...form,
+      title: form.title.trim(),
+      date: form.date,
+      location: form.location.trim(),
+      description: form.description?.trim() || "",
+      imageUrl: form.imageUrl?.trim() || "",
+      createdBy: user?.id || form.createdBy || "",
+      createdAt: form.createdAt || "",
+      updatedAt: form.updatedAt || "",
+    };
+
+    if (!payload.title || !payload.date || !payload.location) {
+      setError("Title, date, and location are required.");
+      setSaving(false);
+      return;
+    }
+
+    try {
+      if (editing) {
+        await updateEvent(editing.id, payload);
+        setInfo("Event updated successfully.");
+      } else {
+        await createEvent(payload);
+        setInfo("Event published successfully.");
+      }
+      resetForm();
+      await loadEvents();
+      setSection("published");
+    } catch (err) {
+      const nextError = err && typeof err === "object" && "error" in err ? String((err as { error: unknown }).error) : "Unable to save event";
+      setError(nextError);
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  async function handleDelete(id: string) {
+    if (!confirm("Delete this event?")) return;
+    setError("");
+    setInfo("");
+
+    try {
+      await deleteEvent(id);
+      setInfo("Event removed.");
+      await loadEvents();
+    } catch (err) {
+      const nextError = err && typeof err === "object" && "error" in err ? String((err as { error: unknown }).error) : "Unable to delete event";
+      setError(nextError);
+    }
+  }
+
+  function handleLogout() {
+    logout();
     navigate("/login");
-  };
+  }
+
+  const navItems = [
+    { key: "overview", label: "Dashboard", caption: "Quick publishing snapshot", badge: String(upcomingEvents.length) },
+    { key: "manage", label: "Create Event", caption: "Draft or edit announcements" },
+    { key: "published", label: "Published", caption: "Review visible resident events", badge: String(upcomingEvents.length) },
+  ];
 
   return (
-    <div style={styles.container}>
-      <div style={styles.sidebar}></div>
-
-      <div style={styles.mainContent}>
-        <PortalHeader rightLabel="Staff" />
-
-        <div style={styles.tabsContainer}>
-          <button
-            style={{
-              ...styles.tab,
-              ...(currentTab === "home" ? styles.tabActive : {}),
-            }}
-            onClick={() => setCurrentTab("home")}
-          >
-            HOME
-          </button>
-          <button
-            style={{
-              ...styles.tab,
-              ...(currentTab === "events" ? styles.tabActive : {}),
-            }}
-            onClick={() => setCurrentTab("events")}
-          >
-            EVENTS
-          </button>
-          <button style={styles.tab} onClick={handleLogout}>
-            LOGOUT
-          </button>
+    <WorkspaceShell
+      rightLabel="Staff"
+      title="Staff Event Desk"
+      subtitle="Plan activities, publish community updates, and keep resident-facing event information fresh."
+      navItems={navItems}
+      activeKey={section}
+      onSelect={(value) => setSection(value as StaffSection)}
+      actions={<button onClick={handleLogout} style={styles.headerButton}>Logout</button>}
+      hero={section === "overview" ? (
+        <div style={styles.heroCard}>
+          <div>
+            <p style={styles.heroEyebrow}>Operations overview</p>
+            <h2 style={styles.heroTitle}>{nextEvent ? nextEvent.title : "No events scheduled yet"}</h2>
+            <p style={styles.heroText}>
+              {nextEvent
+                ? `Next public event is on ${formatDate(nextEvent.date)} at ${nextEvent.location}.`
+                : "Start by creating a new event so residents can see it immediately in their dashboard."}
+            </p>
+          </div>
+          <div style={styles.heroStats}>
+            <div style={styles.metricCard}>
+              <strong>{upcomingEvents.length}</strong>
+              <span>Total published events</span>
+            </div>
+            <div style={styles.metricCard}>
+              <strong>{thisMonthCount}</strong>
+              <span>Scheduled this month</span>
+            </div>
+          </div>
         </div>
+      ) : undefined}
+    >
+      {error ? <div style={styles.errorBox}>{error}</div> : null}
+      {info ? <div style={styles.infoBox}>{info}</div> : null}
+      {loading ? <div style={styles.infoBox}>Loading staff dashboard...</div> : null}
 
-        <div style={styles.actionButtonsContainer}>
-          <button style={styles.deleteButton} onClick={() => alert("Delete selected events")}>
-            DELETE
-          </button>
-          <button style={styles.addButton} onClick={() => setShowAddForm(!showAddForm)}>
-            ADD
-          </button>
+      {section === "overview" ? (
+        <div style={styles.gridTwo}>
+          <section style={styles.panel}>
+            <h3 style={styles.panelTitle}>Publishing workflow</h3>
+            <div style={styles.checklist}>
+              <div style={styles.checkItem}>1. Draft an event with title, date, location, and a short description.</div>
+              <div style={styles.checkItem}>2. Publish it from the staff panel and it becomes visible to residents.</div>
+              <div style={styles.checkItem}>3. Update or remove outdated events from the published list anytime.</div>
+            </div>
+          </section>
+
+          <section style={styles.panel}>
+            <h3 style={styles.panelTitle}>Upcoming lineup</h3>
+            <div style={styles.list}>
+              {upcomingEvents.slice(0, 4).map((event) => (
+                <div key={event.id} style={styles.listItem}>
+                  <strong>{event.title}</strong>
+                  <span>{formatDate(event.date)} • {event.location}</span>
+                </div>
+              ))}
+              {upcomingEvents.length === 0 ? <p style={styles.muted}>No events available yet.</p> : null}
+            </div>
+          </section>
         </div>
+      ) : null}
 
-        {showAddForm && (
-          <div style={styles.addFormContainer}>
+      {section === "manage" ? (
+        <section style={styles.panel}>
+          <div style={styles.sectionHeader}>
+            <div>
+              <h3 style={styles.panelTitle}>{editing ? "Edit event" : "Create a new event"}</h3>
+              <p style={styles.muted}>Residents will see this on their dashboard and on the events page.</p>
+            </div>
+          </div>
+
+          <form onSubmit={handleSubmit} style={styles.formGrid}>
             <input
-              type="text"
-              placeholder="Event Title"
-              value={newEventTitle}
-              onChange={(e) => setNewEventTitle(e.target.value)}
+              value={form.title}
+              onChange={(event) => updateFormValue("title", event.target.value)}
+              placeholder="Event title"
               style={styles.input}
+              required
             />
             <input
               type="date"
-              value={newEventDate}
-              onChange={(e) => setNewEventDate(e.target.value)}
+              value={form.date}
+              onChange={(event) => updateFormValue("date", event.target.value)}
+              style={styles.input}
+              required
+            />
+            <input
+              value={form.location}
+              onChange={(event) => updateFormValue("location", event.target.value)}
+              placeholder="Location"
+              style={styles.input}
+              required
+            />
+            <input
+              value={form.imageUrl}
+              onChange={(event) => updateFormValue("imageUrl", event.target.value)}
+              placeholder="Image URL"
               style={styles.input}
             />
-            <button onClick={addEvent} style={styles.submitButton}>
-              ADD EVENT
-            </button>
-          </div>
-        )}
+            <textarea
+              value={form.description}
+              onChange={(event) => updateFormValue("description", event.target.value)}
+              placeholder="Short description for residents"
+              style={{ ...styles.input, ...styles.textarea }}
+            />
+            <div style={styles.actionsRow}>
+              <button type="submit" style={styles.primaryButton} disabled={saving}>
+                {saving ? "Saving..." : editing ? "Update Event" : "Publish Event"}
+              </button>
+              <button type="button" style={styles.secondaryButton} onClick={resetForm}>
+                Clear Form
+              </button>
+            </div>
+          </form>
+        </section>
+      ) : null}
 
-        <div style={styles.contentArea}>
-          <h2 style={styles.title}>Barangay 420 Events</h2>
-          <div style={styles.eventsGrid}>
-            {events.map((event: Event) => (
-              <div key={event.id} style={styles.eventCard}>
+      {section === "published" ? (
+        <section style={styles.panel}>
+          <div style={styles.sectionHeader}>
+            <div>
+              <h3 style={styles.panelTitle}>Published events</h3>
+              <p style={styles.muted}>Everything here is already visible to residents.</p>
+            </div>
+          </div>
+          <div style={styles.eventGrid}>
+            {upcomingEvents.map((event) => (
+              <article key={event.id} style={styles.eventCard}>
                 <img
-                  src={event.imageUrl}
+                  src={event.imageUrl || FALLBACK_IMAGE}
                   alt={event.title}
                   style={styles.eventImage}
                 />
-                <div style={styles.eventCardContent}>
-                  <h3 style={styles.eventTitle}>{event.title}</h3>
-                  <p style={styles.eventDate}>{event.date}</p>
-                  <div style={styles.eventCardActions}>
-                    <button
-                      style={styles.deleteIcon}
-                      onClick={() => deleteEvent(event.id)}
-                      title="Delete event"
-                    >
+                <div style={styles.eventBody}>
+                  <h4 style={styles.eventTitle}>{event.title}</h4>
+                  <p style={styles.eventMeta}>{formatDate(event.date)} • {event.location}</p>
+                  <p style={styles.eventDescription}>{event.description || "No description added yet."}</p>
+                  <div style={styles.actionsRow}>
+                    <button type="button" style={styles.primaryButton} onClick={() => startEdit(event)}>
+                      Edit
+                    </button>
+                    <button type="button" style={styles.dangerButton} onClick={() => handleDelete(event.id)}>
                       Delete
                     </button>
                   </div>
                 </div>
-              </div>
+              </article>
             ))}
+            {upcomingEvents.length === 0 ? <p style={styles.muted}>No published events yet.</p> : null}
           </div>
-        </div>
-      </div>
-    </div>
+        </section>
+      ) : null}
+    </WorkspaceShell>
   );
 }
 
+function formatDate(value: string) {
+  return new Date(value).toLocaleDateString(undefined, { month: "long", day: "numeric", year: "numeric" });
+}
+
+const FALLBACK_IMAGE = "https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=900&q=80";
+
 const styles = {
-  container: {
+  headerButton: {
+    padding: "8px 14px",
+    borderRadius: 999,
+    border: "none",
+    background: "#eef6ff",
+    color: "#2f7fbe",
+    fontWeight: 700,
+    cursor: "pointer",
+  },
+  heroCard: {
+    borderRadius: 28,
+    padding: "24px 28px",
+    background: "linear-gradient(135deg, #18314f 0%, #315f87 55%, #f0a261 100%)",
+    color: "#fffdf8",
     display: "flex" as const,
-    width: "100vw",
-    minHeight: "100vh",
-    fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
-    background: "#edf4fb",
+    justifyContent: "space-between",
+    alignItems: "stretch",
+    gap: 20,
+    flexWrap: "wrap" as const,
   },
-  sidebar: {
-    width: "60px",
-    background: "linear-gradient(180deg, #ff885b 0%, #f06a3b 100%)",
-    minHeight: "100vh",
-  },
-  mainContent: {
-    flex: 1,
+  heroEyebrow: { margin: 0, fontSize: 12, textTransform: "uppercase" as const, letterSpacing: "0.14em", opacity: 0.8 },
+  heroTitle: { margin: "10px 0 8px", fontSize: 30, lineHeight: 1.1 },
+  heroText: { margin: 0, maxWidth: 620, lineHeight: 1.6, color: "rgba(255,253,248,0.88)" },
+  heroStats: { display: "grid", gridTemplateColumns: "repeat(2, minmax(140px, 1fr))", gap: 12, flex: "1 1 280px" },
+  metricCard: {
+    background: "rgba(255,255,255,0.14)",
+    border: "1px solid rgba(255,255,255,0.18)",
+    borderRadius: 18,
+    padding: "18px 16px",
     display: "flex" as const,
     flexDirection: "column" as const,
-    background: "linear-gradient(135deg, #eef6fd 0%, #e4eef7 100%)",
+    gap: 6,
   },
-  tabsContainer: {
-    display: "flex" as const,
-    gap: "8px",
-    padding: "12px 24px",
-    background: "rgba(255,255,255,0.92)",
-    borderBottom: "2px solid #f3a17a",
-    boxShadow: "0 8px 18px rgba(61, 95, 128, 0.06)",
-  },
-  tab: {
-    padding: "8px 16px",
-    backgroundColor: "#7db5dc",
-    color: "white",
-    border: "none",
-    borderRadius: "8px",
-    cursor: "pointer",
-    fontSize: "13px",
-    fontWeight: "bold" as const,
-  },
-  tabActive: {
-    backgroundColor: "#2f7fbe",
-  },
-  actionButtonsContainer: {
-    display: "flex" as const,
-    gap: "8px",
-    padding: "12px 24px",
-    background: "#edf4fb",
-  },
-  deleteButton: {
-    padding: "8px 16px",
-    backgroundColor: "#d36256",
-    color: "white",
-    border: "none",
-    borderRadius: "8px",
-    cursor: "pointer",
-    fontSize: "12px",
-    fontWeight: "bold" as const,
-  },
-  addButton: {
-    padding: "8px 16px",
-    backgroundColor: "#2f7fbe",
-    color: "white",
-    border: "none",
-    borderRadius: "8px",
-    cursor: "pointer",
-    fontSize: "12px",
-    fontWeight: "bold" as const,
-  },
-  addFormContainer: {
-    background: "rgba(255,255,255,0.94)",
-    padding: "16px 24px",
-    borderBottom: "2px solid #f3a17a",
-    display: "flex" as const,
-    gap: "8px",
-    boxShadow: "0 8px 18px rgba(61, 95, 128, 0.06)",
-  },
-  input: {
-    padding: "8px",
-    border: "1px solid #c9d9e7",
-    borderRadius: "8px",
-    fontSize: "12px",
-    flex: 1,
-  },
-  submitButton: {
-    padding: "8px 16px",
-    backgroundColor: "#2f7fbe",
-    color: "white",
-    border: "none",
-    borderRadius: "8px",
-    cursor: "pointer",
-    fontSize: "12px",
-    fontWeight: "bold" as const,
-  },
-  contentArea: {
-    flex: 1,
-    padding: "32px 40px",
-    overflowY: "auto" as const,
-    background: "linear-gradient(135deg, #eef6fd 0%, #e4eef7 100%)",
-  },
-  title: {
-    fontSize: "24px",
-    fontWeight: "bold" as const,
-    marginBottom: "24px",
-    color: "#243b53",
-  },
-  eventsGrid: {
-    display: "grid" as const,
-    gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))",
-    gap: "16px",
-    background: "linear-gradient(135deg, #eef6fd 0%, #e4eef7 100%)",
-  },
-  eventCard: {
+  errorBox: { background: "#fff3f2", color: "#bc4a38", padding: 14, borderRadius: 14, border: "1px solid #f1b4ac" },
+  infoBox: { background: "#edf6ff", color: "#2f7fbe", padding: 14, borderRadius: 14, border: "1px solid #cfe4f7" },
+  gridTwo: { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 20 },
+  panel: {
     background: "rgba(255,255,255,0.96)",
-    borderRadius: "10px",
-    overflow: "hidden",
-    boxShadow: "0 14px 28px rgba(58, 95, 130, 0.12)",
-    border: "1px solid rgba(145, 180, 210, 0.24)",
-    cursor: "pointer",
+    borderRadius: 24,
+    padding: 24,
+    border: "1px solid rgba(145, 180, 210, 0.22)",
+    boxShadow: "0 18px 40px rgba(39, 66, 89, 0.08)",
   },
-  eventImage: {
+  panelTitle: { margin: "0 0 10px", fontSize: 22, color: "#24425c" },
+  muted: { margin: 0, color: "#607489", lineHeight: 1.6 },
+  checklist: { display: "grid", gap: 12 },
+  checkItem: { padding: "14px 16px", borderRadius: 16, background: "#f6fbff", color: "#34536d", border: "1px solid #dceaf5" },
+  list: { display: "grid", gap: 12 },
+  listItem: { display: "grid", gap: 4, padding: "12px 0", borderBottom: "1px solid #e8eef5", color: "#34536d" },
+  sectionHeader: { display: "flex" as const, justifyContent: "space-between", gap: 14, alignItems: "flex-start" },
+  formGrid: { display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: 14 },
+  input: {
     width: "100%",
-    height: "150px",
-    objectFit: "cover" as const,
+    border: "1px solid #d4e1ee",
+    borderRadius: 16,
+    padding: "14px 16px",
+    background: "#f9fcff",
+    boxSizing: "border-box" as const,
+    fontSize: 14,
   },
-  eventCardContent: {
-    padding: "12px",
-  },
-  eventTitle: {
-    margin: "0 0 4px 0",
-    fontSize: "13px",
-    fontWeight: "bold" as const,
-    color: "#243b53",
-  },
-  eventDate: {
-    margin: "0",
-    fontSize: "11px",
-    color: "#607489",
-  },
-  eventCardActions: {
-    display: "flex" as const,
-    gap: "4px",
-    marginTop: "8px",
-  },
-  deleteIcon: {
-    padding: "4px 8px",
-    background: "transparent",
-    border: "1px solid #c9d9e7",
+  textarea: { minHeight: 140, gridColumn: "1 / -1", resize: "vertical" as const },
+  actionsRow: { display: "flex" as const, gap: 10, alignItems: "center", flexWrap: "wrap" as const },
+  primaryButton: {
+    border: "none",
+    borderRadius: 14,
+    padding: "12px 18px",
+    background: "#2f7fbe",
+    color: "#fff",
+    fontWeight: 700,
     cursor: "pointer",
-    fontSize: "12px",
-    borderRadius: "6px",
-    color: "#2f7fbe",
   },
-};
+  secondaryButton: {
+    border: "none",
+    borderRadius: 14,
+    padding: "12px 18px",
+    background: "#edf1f6",
+    color: "#34536d",
+    fontWeight: 700,
+    cursor: "pointer",
+  },
+  dangerButton: {
+    border: "none",
+    borderRadius: 14,
+    padding: "12px 18px",
+    background: "#d66b5b",
+    color: "#fff",
+    fontWeight: 700,
+    cursor: "pointer",
+  },
+  eventGrid: { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 18 },
+  eventCard: {
+    borderRadius: 20,
+    overflow: "hidden" as const,
+    background: "#fff",
+    border: "1px solid #e3edf6",
+    boxShadow: "0 16px 32px rgba(39, 66, 89, 0.08)",
+  },
+  eventImage: { width: "100%", height: 180, objectFit: "cover" as const, display: "block" as const },
+  eventBody: { padding: 18, display: "grid", gap: 10 },
+  eventTitle: { margin: 0, fontSize: 18, color: "#24425c" },
+  eventMeta: { margin: 0, color: "#607489", fontSize: 13 },
+  eventDescription: { margin: 0, color: "#3f586e", lineHeight: 1.6 },
+} as const;

@@ -10,12 +10,23 @@ export default function ActivityLogs() {
   const { user, logout } = useAuth();
   const [logs, setLogs] = useState<ActivityLog[]>([]);
   const [error, setError] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
 
   const dashboardPath = useMemo(() => {
     if (user?.role === "secretary") return "/secretary";
     if (user?.role === "staff") return "/staff";
     return "/resident";
   }, [user?.role]);
+
+  const filteredLogs = useMemo(() => {
+    const query = searchTerm.trim().toLowerCase();
+    if (!query) return logs;
+    return logs.filter((log) =>
+      [log.id, log.action, log.userId, log.details, log.timestamp].some((value) =>
+        (value || "").toString().toLowerCase().includes(query)
+      )
+    );
+  }, [logs, searchTerm]);
 
   useEffect(() => {
     fetchLogs()
@@ -44,6 +55,15 @@ export default function ActivityLogs() {
       <div style={styles.content}>
         <h2 style={styles.pageTitle}>System Activity Logs & Audit Trail</h2>
         {error && <p style={styles.errorText}>{error}</p>}
+        <div style={styles.toolbar}>
+          <input
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            placeholder="Search by log id, action, user, or timestamp"
+            style={styles.searchInput}
+          />
+          <div style={styles.countPill}>{filteredLogs.length} logs</div>
+        </div>
 
         <table style={styles.table}>
           <thead style={{ background: "#1e3c72", color: "white" }}>
@@ -51,21 +71,23 @@ export default function ActivityLogs() {
               <th style={{ padding: "12px", textAlign: "left" }}>Log ID</th>
               <th style={{ padding: "12px", textAlign: "left" }}>Activity</th>
               <th style={{ padding: "12px", textAlign: "left" }}>User ID</th>
+              <th style={{ padding: "12px", textAlign: "left" }}>Details</th>
               <th style={{ padding: "12px", textAlign: "left" }}>Timestamp</th>
             </tr>
           </thead>
           <tbody>
-            {logs.map((log) => (
+            {filteredLogs.map((log) => (
               <tr key={log.id}>
                 <td style={styles.cell}>{log.id}</td>
                 <td style={styles.cell}>{log.action}</td>
                 <td style={styles.cell}>{log.userId || "-"}</td>
+                <td style={styles.cell}>{log.details || "-"}</td>
                 <td style={styles.cell}>{log.timestamp}</td>
               </tr>
             ))}
-            {logs.length === 0 && (
+            {filteredLogs.length === 0 && (
               <tr>
-                <td colSpan={4} style={{ padding: "12px", textAlign: "center", color: "#666" }}>
+                <td colSpan={5} style={{ padding: "12px", textAlign: "center", color: "#666" }}>
                   No activity logs found
                 </td>
               </tr>
@@ -110,10 +132,6 @@ const styles = {
     padding: "24px 50px",
     width: "100%",
     margin: "0",
-    background: "rgba(255,255,255,0.96)",
-    borderRadius: "12px",
-    boxShadow: "0 18px 36px rgba(58, 95, 130, 0.12)",
-    border: "1px solid rgba(145, 180, 210, 0.24)",
     flex: 1,
     overflowY: "auto" as const,
   },
@@ -126,6 +144,32 @@ const styles = {
   errorText: {
     color: "#bc4a38",
     marginBottom: "10px",
+  },
+  toolbar: {
+    display: "flex" as const,
+    justifyContent: "space-between",
+    alignItems: "center",
+    gap: 12,
+    marginBottom: 16,
+  },
+  searchInput: {
+    width: "100%",
+    maxWidth: "420px",
+    padding: "10px 12px",
+    border: "1px solid #c9d9e7",
+    borderRadius: "8px",
+    fontSize: "14px",
+    background: "#f8fbff",
+    boxSizing: "border-box" as const,
+  },
+  countPill: {
+    padding: "8px 12px",
+    borderRadius: "999px",
+    background: "#edf6ff",
+    color: "#2f7fbe",
+    fontWeight: 700,
+    fontSize: "12px",
+    whiteSpace: "nowrap" as const,
   },
   table: {
     width: "100%",

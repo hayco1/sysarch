@@ -5,10 +5,14 @@ import { AuthContext } from "./auth-context";
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [ready, setReady] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem("auth_token");
-    if (!token) return;
+    if (!token) {
+      setReady(true);
+      return;
+    }
     let mounted = true;
     (async () => {
       try {
@@ -16,9 +20,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         if (mounted) setUser({ id: decoded.id, username: decoded.username || "", email: decoded.email || "", role: decoded.role });
       } catch {
         if (mounted) setUser(null);
+      } finally {
+        if (mounted) setReady(true);
       }
     })();
-    return () => { mounted = false; };
+    return () => {
+      mounted = false;
+    };
   }, []);
 
   const logout = () => {
@@ -27,7 +35,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   return (
-    <AuthContext.Provider value={{ user, setUser, logout }}>
+    <AuthContext.Provider value={{ user, ready, setUser, logout }}>
       {children}
     </AuthContext.Provider>
   );

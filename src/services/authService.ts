@@ -27,8 +27,21 @@ export interface Resident {
   citizenship?: string;
   notes?: string;
   status: string;
+  beneficiarySelectionCount?: number;
+  lastBeneficiarySelectedAt?: string;
+  householdMembers?: HouseholdMember[];
   createdAt?: string;
   updatedAt?: string;
+}
+
+export interface HouseholdMember {
+  id: string;
+  fullName: string;
+  relationship: string;
+  age: number;
+  gender?: string;
+  occupation?: string;
+  civilStatus?: string;
 }
 
 export interface Program {
@@ -36,11 +49,49 @@ export interface Program {
   [key: string]: unknown;
 }
 
+export interface EventRecord {
+  id: string;
+  title: string;
+  date: string;
+  location: string;
+  description?: string;
+  imageUrl?: string;
+  createdBy?: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
 export interface ActivityLog {
   id: string;
   action: string;
   userId: string;
+  details?: string;
   timestamp: string;
+}
+
+export interface DashboardOverview {
+  barangayName: string;
+  district: string;
+  city: string;
+  totalResidents: number;
+  seniorResidents: number;
+  pwdResidents: number;
+  pendingBeneficiaries: number;
+  claimedBeneficiaries: number;
+  publishedEvents: number;
+}
+
+export interface UserAccount {
+  id: string;
+  username: string;
+  firstName?: string;
+  middleName?: string;
+  lastName?: string;
+  email: string;
+  contactNumber?: string;
+  address?: string;
+  role: Role;
+  isActive: boolean;
 }
 
 export interface RegisterPayload {
@@ -158,8 +209,40 @@ export async function fetchBeneficiaries() {
   return await request<Resident[]>("/beneficiaries");
 }
 
+export async function recordBeneficiarySelection(id: string) {
+  return await request<Resident>(`/beneficiaries/${id}/select`, { method: "POST" });
+}
+
 export async function fetchLogs() {
   return await request<ActivityLog[]>("/logs");
+}
+
+export async function fetchUsers() {
+  return await request<UserAccount[]>("/users");
+}
+
+export async function exportBackup() {
+  return await request<Record<string, unknown>>("/backup");
+}
+
+export async function fetchEvents() {
+  return await request<EventRecord[]>("/events");
+}
+
+export async function fetchDashboardOverview() {
+  return await request<DashboardOverview>("/dashboard/overview");
+}
+
+export async function createEvent(event: Omit<EventRecord, "id">) {
+  return await request<EventRecord>("/events", { method: "POST", body: JSON.stringify(event) });
+}
+
+export async function updateEvent(id: string, event: Omit<EventRecord, "id">) {
+  return await request<EventRecord>(`/events/${id}`, { method: "PUT", body: JSON.stringify(event) });
+}
+
+export async function deleteEvent(id: string) {
+  return await request<{ success: boolean }>(`/events/${id}`, { method: "DELETE" });
 }
 
 // helper
